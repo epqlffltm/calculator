@@ -1,17 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 void input_num(float* pary_num, char* pary_simbol, int num); // 입력
 void print_value(float* pary_num, char* pary_simbol, int num, float value_num); // 출력
 float calculation(float* pary_num, char* pary_simbol, int num); // 연산
+
 int main(void) 
 {
     float* pary_num; // 입력된 숫자
     char* pary_simbol; // 기호 저장
     int num = 0; // 연산에 쓰일 숫자의 개수
     char ch; // (Y/N)
+
     while (1) {
         printf("연산을 실행하시겠습니까?(Y/N) ");
         scanf_s(" %c", &ch, 1); // %c 앞에 공백 추가하여 남은 개행 문자를 소비, 그리고 크기를 추가
+
         switch (ch) 
         {
         case 'y':
@@ -45,8 +49,10 @@ int main(void)
             break;
         }
     }
+
     return 0;
 }
+
 void input_num(float* pary_num, char* pary_simbol, int num) 
 {
     for (int i = 0; i < num; i++) 
@@ -57,6 +63,7 @@ void input_num(float* pary_num, char* pary_simbol, int num)
         {
             printf("연산 기호를 입력하세요\n");
             scanf_s(" %c", &pary_simbol[i], 1); // %c 앞에 공백 추가하여 남은 개행 문자를 소비, 그리고 크기를 추가
+
             switch (pary_simbol[i]) 
             {
             case '+':
@@ -71,19 +78,23 @@ void input_num(float* pary_num, char* pary_simbol, int num)
             }
         }
     }
+
     float result = calculation(pary_num, pary_simbol, num);
     print_value(pary_num, pary_simbol, num, result);
 }
+
 float calculation(float* pary_num, char* pary_simbol, int num) 
 {
     // 임시 배열을 사용하여 중간 결과를 저장
     float* temp_num = (float*)malloc(num * sizeof(float));
-    char* temp_simbol = (char*)malloc((num - 1) * sizeof(char));
+    char* temp_simbol = (char*)malloc(num * sizeof(char));
+
     for (int i = 0; i < num; i++) 
     {
         temp_num[i] = pary_num[i];
         temp_simbol[i] = pary_simbol[i];
     }
+
     // 1단계: 곱셈과 나눗셈 처리
     for (int i = 0; i < num - 1; i++) 
     {
@@ -116,6 +127,7 @@ float calculation(float* pary_num, char* pary_simbol, int num)
             i--; // 현재 위치를 다시 검사합니다.
         }
     }
+
     // 2단계: 덧셈과 뺄셈 처리
     float value_num = temp_num[0];
     for (int i = 1, j = 0; i < num; i++, j++) 
@@ -129,10 +141,13 @@ float calculation(float* pary_num, char* pary_simbol, int num)
             value_num -= temp_num[i];
         }
     }
+
     free(temp_num);
     free(temp_simbol);
+
     return value_num;
 }
+
 void print_value(float* pary_num, char* pary_simbol, int num, float value_num) 
 {
     for (int i = 0; i < num - 1; i++) 
